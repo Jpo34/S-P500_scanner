@@ -24,8 +24,13 @@ def get_sp500_tickers():
 def get_nasdaq100_tickers():
     try:
         tables = pd.read_html(TICKERS_URL_NASDAQ100)
-        df = tables[3]  # The 4th table contains the tickers
-        return df["Ticker"].tolist()
+        # Find the table with the tickers
+        for table in tables:
+            for col in table.columns:
+                if 'Ticker' in col or 'Symbol' in col:
+                    return table[col].tolist()
+        st.error("Could not find 'Ticker' or 'Symbol' column in Nasdaq 100 table.")
+        return []
     except Exception as e:
         st.error(f"Failed to fetch Nasdaq 100 tickers: {e}")
         return []
