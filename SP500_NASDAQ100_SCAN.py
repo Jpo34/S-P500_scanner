@@ -27,7 +27,7 @@ def get_nasdaq100_tickers():
         # Find the table with the tickers
         for table in tables:
             for col in table.columns:
-                if 'Ticker' in col or 'Symbol' in col:
+                if isinstance(col, str) and ('Ticker' in col or 'Symbol' in col):
                     return table[col].tolist()
         st.error("Could not find 'Ticker' or 'Symbol' column in Nasdaq 100 table.")
         return []
